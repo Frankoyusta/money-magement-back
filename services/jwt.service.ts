@@ -1,7 +1,11 @@
 import jwt from 'jsonwebtoken';
-require('dotenv').config()
+import 'dotenv/config'
 
 
+const JWT_SEED = process.env.SECRET_JWT_SEED;
+if (!JWT_SEED) {
+    throw new Error('Falta la variable de entorno SECRET_JWT_SEED');
+}
 
 export class JsonWebTokenService {
 
@@ -12,14 +16,14 @@ export class JsonWebTokenService {
                 name
             };
 
-            jwt.sign(payload, process.env.SECRET_JWT_SEED as jwt.Secret, {
+            jwt.sign(payload, JWT_SEED as jwt.Secret, {
                 expiresIn: '2h',
             }, (err, token) => {
                 if (err) {
                     console.log(err)
-                    reject('An error was ocurred')
+                    return reject(new Error('Error al generar el token'))
                 }
-                resolve(token as string);
+                return resolve(token as string);
             });
 
         })
