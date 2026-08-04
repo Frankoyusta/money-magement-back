@@ -91,7 +91,9 @@ const register = async (email: string, password: string, name: string): Promise<
 
         }
     }
-}
+};
+
+
 
 
 export default {

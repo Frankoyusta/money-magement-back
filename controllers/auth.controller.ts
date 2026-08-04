@@ -40,7 +40,14 @@ export const registerController = async (req: Request, res: Response) => {
         name: response.name,
         id: response.id
     })
-}
+};
+
+
+
+// export const renewController = async (req: Request, res: Response) => {
+//     const { token } = req.body
+//     const response = await authService.renew(token);
+// }
 
 
 

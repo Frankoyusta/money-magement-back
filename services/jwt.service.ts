@@ -27,8 +27,11 @@ export class JsonWebTokenService {
             });
 
         })
+    }
 
-
+    checkJWT = async (token: string) => {
+        const verify = jwt.verify(token, JWT_SEED as jwt.Secret);
+        return verify
     }
 
 }
