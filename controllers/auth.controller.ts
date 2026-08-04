@@ -6,8 +6,8 @@ export const loginController = async (req: Request, res: Response) => {
     const response = await authService.login(email, password);
 
     if (response.codeError) {
-        const code = +response.codeError
-        res.status(code).json({
+        const code = response.codeError
+        return res.status(code).json({
             ok: false,
             msg: response.msg
         })
@@ -27,8 +27,8 @@ export const registerController = async (req: Request, res: Response) => {
     const { email, password, name } = req.body
     const response = await authService.register(email, password, name);
     if (response.codeError) {
-        const code = +response.codeError
-        res.status(code).json({
+        const code = response.codeError
+        return res.status(code).json({
             ok: false,
             msg: response.msg
         })

@@ -16,7 +16,7 @@ const login = async (email: string, password: string): Promise<AuthResponse> => 
                 token: '',
                 name: '',
                 id: '',
-                codeError: 404,
+                codeError: 401,
                 msg: 'Credenciales incorrectas'
             }
         }
