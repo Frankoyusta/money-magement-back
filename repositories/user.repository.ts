@@ -5,7 +5,7 @@ import { prisma } from '../database/prisma.config';
 export class UserRepository {
 
 
-    createOrUpdateUser = async (email: string, password: string, name: string) => {
+    createUser = async (email: string, password: string, name: string) => {
         return await prisma.user.create({
             data: {
                 id: randomUUID(),

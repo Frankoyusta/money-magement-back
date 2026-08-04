@@ -1,13 +1,16 @@
 import express from 'express';
 import 'dotenv/config';
 import { router as authRouter } from './routes/auth.routes';
-
+import cors from 'cors'
 
 // Creamos el servidor de express
 const app = express();
 
 //Directorio publico
 app.use(express.static('public'));
+
+// CORS
+app.use(cors())
 
 // Lectura y parseo del body
 app.use(express.json());
