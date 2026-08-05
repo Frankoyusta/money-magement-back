@@ -90,7 +90,22 @@ export const refreshController = async (req: Request, res: Response) => {
 
     const response = await authService.refresh(refreshToken);
 
-    return res.status(200)
+    if (!response || response.codeError) {
+        return res.status(response.codeError).json({
+            ok: false,
+            msg: response.msg
+        })
+    }
+    return res.status(200).json({
+        ok: true,
+        token: response.newToken,
+        user: {
+            id: response.user?.id,
+            name: response.user?.name,
+            role: response.user?.role,
+            email: response.user?.email
+        }
+    })
 }
 
 

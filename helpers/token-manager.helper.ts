@@ -5,8 +5,19 @@ const jtwService = new JsonWebTokenService()
 
 
 // Validacion de si existen valores en el ENV
-const tokenSessionDuration = process.env.SESSION_TOKEN_DURATION_IN_MINUTES || '15m'
-const tokenRefreshDuration = process.env.REFRESH_TOKEN_DURATION_IN_HOURS || '360h'
+const rawSession = process.env.SESSION_TOKEN_DURATION_IN_MINUTES
+const rawRefresh = process.env.REFRESH_TOKEN_DURATION_IN_HOURS
+
+const normalizeDuration = (value: string | undefined, unit: 'm' | 'h', fallback: string) => {
+    if (!value) return fallback
+    // If the value is purely numeric, append the unit (minutes -> 'm', hours -> 'h')
+    if (/^\d+$/.test(value)) return `${value}${unit}`
+    // Otherwise assume the user provided a valid format like '15m' or '360h'
+    return value
+}
+
+const tokenSessionDuration = normalizeDuration(rawSession, 'm', '15m')
+const tokenRefreshDuration = normalizeDuration(rawRefresh, 'h', '360h')
 
 
 export const tokenManager = async (user: User): Promise<{ sessionToken: string, refreshToken: string }> => {

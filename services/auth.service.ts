@@ -119,10 +119,41 @@ const refresh = async (token: string) => {
     try {
         // Verificar firma y expiracion del refreshToken
         const payload = await jtwService.checkJWT(token);
-        console.log('5', { token })
-        console.log(payload)
-        // Verificar 
-        return { token, user: payload };
+
+        if (!payload) {
+            return {
+                codeError: 401,
+                msg: 'Token inválido o expirado.'
+            };
+        }
+
+        if (typeof payload === 'string' || !('id' in payload)) {
+            return {
+                codeError: 401,
+                msg: 'Token inválido o expirado.'
+            };
+        }
+
+        const user = await userRepository.findUserById(payload.id);
+
+        if (!user) {
+            return {
+                codeError: 401,
+                msg: 'Token inválido o expirado'
+            };
+        };
+
+        if (token !== user.refreshToken) {
+            return {
+                codeError: 401,
+                msg: 'Token inválido o expirado`'
+            };
+        };
+
+        const newToken = await jtwService.generarJWT(user.id, user.name, user.role, '15m')
+
+
+        return { newToken, user: user };
     } catch (error) {
         return { codeError: 401, msg: 'Token inválido o expirado' };
     }
