@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import 'dotenv/config'
 
 
@@ -9,15 +9,16 @@ if (!JWT_SEED) {
 
 export class JsonWebTokenService {
 
-    generarJWT = async (id: string, name: string): Promise<string> => {
+    generarJWT = async (id: string, name: string, role: string, duration: string): Promise<string> => {
         return new Promise((resolve, reject) => {
             const payload = {
                 id,
-                name
+                name,
+                role
             };
 
-            jwt.sign(payload, JWT_SEED as jwt.Secret, {
-                expiresIn: '2h',
+            jwt.sign(payload, JWT_SEED as string, {
+                expiresIn: duration as SignOptions['expiresIn'],
             }, (err, token) => {
                 if (err) {
                     console.log(err)

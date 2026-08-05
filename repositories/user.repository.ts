@@ -12,7 +12,17 @@ export class UserRepository {
                 password: password,
                 name: name,
                 email: email,
-                role: 'user'
+                role: 'user',
+                refreshToken: ''
+            }
+        })
+    }
+
+    saveRefreshToken = async (id: string, refreshToken: string) => {
+        return await prisma.user.update({
+            where: { id },
+            data: {
+                refreshToken
             }
         })
     }

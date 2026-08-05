@@ -13,12 +13,13 @@ datasource db {
 }
 
 model User {
-  id       String    @id
-  email    String    @unique
-  password String
-  name     String
-  role     String
-  expenses Expense[]
+  id           String    @id
+  email        String    @unique
+  password     String
+  name         String
+  role         String
+  refreshToken String    @unique
+  expenses     Expense[]
 }
 
 model Expense {
