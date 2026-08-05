@@ -35,4 +35,9 @@ export class JsonWebTokenService {
         return verify
     }
 
+    decodeJWT = async (token: string) => {
+        const payload = jwt.decode(token);
+        return payload
+    }
+
 }

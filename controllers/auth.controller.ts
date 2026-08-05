@@ -16,8 +16,7 @@ export const loginController = async (req: Request, res: Response) => {
     res.status(200).json({
         ok: true,
         token: response.token,
-        name: response.name,
-        id: response.id
+        user: response.user
     })
 
 }
@@ -37,17 +36,32 @@ export const registerController = async (req: Request, res: Response) => {
     res.status(200).json({
         ok: true,
         token: response.token,
-        name: response.name,
-        id: response.id
+        user: response.user
+
     })
 };
 
 
 
-// export const renewController = async (req: Request, res: Response) => {
-//     const { token } = req.body
-//     const response = await authService.renew(token);
-// }
+export const checkController = async (req: Request, res: Response) => {
+    const token = req.header('Authorization')
+    if (!token) {
+        res.status(401).json({
+            ok: false,
+            msg: 'Token no valido'
+
+        })
+        return;
+    }
+
+    const response = await authService.renew(token);
+
+    return res.status(200).json({
+        ok: true,
+        user: response.user,
+        token: response.token
+    });
+}
 
 
 

@@ -4,10 +4,13 @@ import { AuthResponse } from "../interfaces/auth-response.interface";
 import { UserRepository } from "../repositories/user.repository"
 import { HashService } from "./hash.service";
 import 'dotenv/config'
+import { JsonWebTokenService } from "./jwt.service";
 
 // Definición de repositorios
 const userRepository = new UserRepository()
 const hashService = new HashService()
+const jtwService = new JsonWebTokenService()
+
 
 
 const login = async (email: string, password: string): Promise<AuthResponse> => {
@@ -37,15 +40,16 @@ const login = async (email: string, password: string): Promise<AuthResponse> => 
 
         return {
             token: sessionToken,
-            name: user.name,
-            id: user.id
+            user: {
+                id: user.id,
+                name: user.name,
+                role: user.role,
+                email: user.email
+            }
         }
     } catch (error) {
         console.log(error)
         return {
-            token: '',
-            name: '',
-            id: '',
             codeError: 500,
             msg: 'Error en el servidor'
 
@@ -80,11 +84,14 @@ const register = async (email: string, password: string, name: string): Promise<
         // Guardar refreshToken
         const a = await userRepository.saveRefreshToken(user.id, refreshToken);
 
-
         return {
             token: sessionToken,
-            name: user.name,
-            id: user.id
+            user: {
+                id: user.id,
+                name: user.name,
+                role: user.role,
+                email: user.email
+            }
         }
     } catch (error) {
         return {
@@ -96,9 +103,27 @@ const register = async (email: string, password: string, name: string): Promise<
 };
 
 
+const renew = async (token: string) => {
+
+    const payload = await jtwService.decodeJWT(token);
+    if (!payload) {
+        return {
+            codeError: 401,
+            msg: 'Error de autenticación'
+        }
+    }
+
+    return {
+        token: token,
+        user: payload,
+    }
+}
+
+
 
 
 export default {
     login,
-    register
+    register,
+    renew
 }

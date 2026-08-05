@@ -1,7 +1,15 @@
+
 export interface AuthResponse {
-    id?: string;
-    name?: string;
+    user?: UserToResponse
     token?: string;
     codeError?: number;
     msg?: string;
+}
+
+
+interface UserToResponse {
+    name: string;
+    id: string;
+    email: string;
+    role: string;
 }
