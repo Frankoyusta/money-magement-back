@@ -26,4 +26,4 @@ router.post('/register',
 
 
 router.get('/check-status', checkController);
-router.get('/refresh-token', refreshController);
+router.post('/refresh-token', refreshController);

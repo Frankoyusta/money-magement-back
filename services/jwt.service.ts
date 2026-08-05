@@ -10,38 +10,29 @@ if (!JWT_SEED) {
 export class JsonWebTokenService {
 
     generarJWT = async (id: string, name: string, role: string, duration: string): Promise<string> => {
-        try {
-            return new Promise((resolve, reject) => {
-                const payload = {
-                    id,
-                    name,
-                    role
-                };
+        return new Promise((resolve, reject) => {
+            const payload = {
+                id,
+                name,
+                role
+            };
 
-                jwt.sign(payload, JWT_SEED as string, {
-                    expiresIn: duration as SignOptions['expiresIn'],
-                }, (err, token) => {
-                    if (err) {
-                        console.log(err)
-                        return reject(new Error('Error al generar el token'))
-                    }
-                    return resolve(token as string);
-                });
+            jwt.sign(payload, JWT_SEED as string, {
+                expiresIn: duration as SignOptions['expiresIn'],
+            }, (err, token) => {
+                if (err) {
+                    console.log(err)
+                    return reject(new Error('Error al generar el token'))
+                }
+                return resolve(token as string);
+            });
 
-            })
-        } catch (error) {
-            console.log(error)
-            return ''
-        }
+        })
     }
 
     checkJWT = async (token: string) => {
-        try {
-            const verify = jwt.verify(token, JWT_SEED as jwt.Secret);
-            return verify
-        } catch (error) {
-            console.log(error)
-        }
+        const verify = jwt.verify(token, JWT_SEED as jwt.Secret);
+        return verify
     }
 
     decodeJWT = async (token: string) => {
