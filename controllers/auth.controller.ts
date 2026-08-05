@@ -13,6 +13,14 @@ export const loginController = async (req: Request, res: Response) => {
         })
     }
 
+
+    res.cookie('refreshToken', response.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 24 * 60 * 60 * 1000 // 15 días
+    });
+
     res.status(200).json({
         ok: true,
         token: response.token,
@@ -32,6 +40,13 @@ export const registerController = async (req: Request, res: Response) => {
             msg: response.msg
         })
     }
+
+    res.cookie('refreshToken', response.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 24 * 60 * 60 * 1000 // 15 días
+    });
 
     res.status(200).json({
         ok: true,
@@ -55,12 +70,27 @@ export const checkController = async (req: Request, res: Response) => {
     }
 
     const response = await authService.renew(token);
-
+    if (response.codeError) {
+        return res.status(response.codeError).json({ ok: false, msg: response.msg });
+    }
     return res.status(200).json({
         ok: true,
         user: response.user,
         token: response.token
     });
+
+}
+
+
+export const refreshController = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+        return res.status(401).json({ ok: false, msg: 'No hay refresh token' });
+    }
+
+    const response = await authService.refresh(refreshToken);
+
+    return res.status(200)
 }
 
 

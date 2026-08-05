@@ -36,10 +36,11 @@ const login = async (email: string, password: string): Promise<AuthResponse> => 
         const { refreshToken, sessionToken } = await tokenManager(user)
 
         // Guardar refreshToken
-        userRepository.saveRefreshToken(user.id, refreshToken);
+        await userRepository.saveRefreshToken(user.id, refreshToken);
 
         return {
             token: sessionToken,
+            refreshToken,
             user: {
                 id: user.id,
                 name: user.name,
@@ -86,6 +87,7 @@ const register = async (email: string, password: string, name: string): Promise<
 
         return {
             token: sessionToken,
+            refreshToken,
             user: {
                 id: user.id,
                 name: user.name,
@@ -104,26 +106,33 @@ const register = async (email: string, password: string, name: string): Promise<
 
 
 const renew = async (token: string) => {
-
-    const payload = await jtwService.decodeJWT(token);
-    if (!payload) {
-        return {
-            codeError: 401,
-            msg: 'Error de autenticación'
-        }
-    }
-
-    return {
-        token: token,
-        user: payload,
+    try {
+        const payload = await jtwService.checkJWT(token); // verifica firma + expiración
+        return { token, user: payload };
+    } catch (error) {
+        return { codeError: 401, msg: 'Token inválido o expirado' };
     }
 }
 
+
+const refresh = async (token: string) => {
+    try {
+        // Verificar firma y expiracion del refreshToken
+        const payload = await jtwService.checkJWT(token);
+        console.log('5', { token })
+        console.log(payload)
+        // Verificar 
+        return { token, user: payload };
+    } catch (error) {
+        return { codeError: 401, msg: 'Token inválido o expirado' };
+    }
+}
 
 
 
 export default {
     login,
     register,
-    renew
+    renew,
+    refresh,
 }

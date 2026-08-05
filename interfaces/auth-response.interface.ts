@@ -2,6 +2,7 @@
 export interface AuthResponse {
     user?: UserToResponse
     token?: string;
+    refreshToken?: string;
     codeError?: number;
     msg?: string;
 }

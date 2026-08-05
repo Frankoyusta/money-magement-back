@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import { router as authRouter } from './routes/auth.routes';
 import cors from 'cors'
+import cookieParser from 'cookie-parser';
 
 // Creamos el servidor de express
 const app = express();
@@ -11,6 +12,10 @@ app.use(express.static('public'));
 
 // CORS
 app.use(cors())
+
+// Para poder ller las cookies
+app.use(cookieParser());
+
 
 // Lectura y parseo del body
 app.use(express.json());

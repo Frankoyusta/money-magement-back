@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkController, loginController, registerController } from '../controllers/auth.controller';
+import { checkController, loginController, refreshController, registerController } from '../controllers/auth.controller';
 import { check } from 'express-validator';
 import { fieldValidator } from '../middlewares/fields-validator';
 
@@ -26,3 +26,4 @@ router.post('/register',
 
 
 router.get('/check-status', checkController);
+router.get('/refresh-token', refreshController);

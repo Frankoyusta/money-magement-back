@@ -31,6 +31,7 @@ export class JsonWebTokenService {
     }
 
     checkJWT = async (token: string) => {
+        console.log(token)
         const verify = jwt.verify(token, JWT_SEED as jwt.Secret);
         return verify
     }
