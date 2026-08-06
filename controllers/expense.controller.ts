@@ -32,10 +32,17 @@ export const getExpensesController = async (req: RequestWithUser, res: Response)
 
 
 
-export const upsertController = async (req: Request, res: Response) => {
+export const upsertController = async (req: RequestWithUser, res: Response) => {
     try {
+        const userId = req.uid
+        if (!userId) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'El id del usuario es requerido'
+            })
+        }
         const { expense } = req.body
-        const response = await expenseService.upsertExpense(expense);
+        const response = await expenseService.upsertExpense({ ...expense, userId });
         if (response.codeError) {
             return res.status(response.codeError).json({
                 ok: false,
@@ -75,7 +82,7 @@ export const deleteExpenseController = async (req: RequestWithUser, res: Respons
                 msg: response.msg
             })
         }
-        return res.status(201).json({
+        return res.status(200).json({
             ok: true,
             msg: 'Producto eliminado con exito'
         })

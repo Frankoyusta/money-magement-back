@@ -15,7 +15,7 @@ if (!JWT_SEED) {
 export const validateJWT = (req: RequestWithUser, res: Response, next: NextFunction) => {
 
     // x-token headers
-    const token = req.header('x-token');
+    const token = req.header('Authorization');
 
     if (!token) {
         return res.status(401).json({
