@@ -31,4 +31,24 @@ export class ExpenseService {
         return {}
     }
 
+
+    getExpensesByUserId = async (userId: string) => {
+        // Validar que el usuario exista 
+        const user = await userRepository.findUserById(userId);
+        if (!user) {
+            return {
+                codeError: 404,
+                msg: 'Usuario no existe'
+            };
+        };
+
+        // Traer todos los expenses del usuario
+        const expenses = await expenseRepository.findByUserId(userId);
+
+
+        return {
+            expenses
+        }
+    }
+
 }

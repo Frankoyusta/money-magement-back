@@ -37,4 +37,12 @@ export class ExpenseRepository {
             }
         })
     }
+
+    findByUserId = async (userId: string) => {
+        return await prisma.expense.findMany({
+            where: {
+                userId: userId
+            }
+        })
+    }
 }
