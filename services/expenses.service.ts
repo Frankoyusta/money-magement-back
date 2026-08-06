@@ -64,7 +64,10 @@ export class ExpenseService {
 
         // En caso de edición se busca el expense y validamos que el userId del expense sea el mismo que el del user
         const expenseFouded = await expenseRepository.findById(expenseId)
-        if (expenseFouded && expenseFouded.userId !== user.id) {
+        if (!expenseFouded) {
+            return { codeError: 404, msg: 'Gasto no encontrado' };
+        }
+        if (expenseFouded.userId !== user.id) {
             return {
                 codeError: 401,
                 msg: 'No estas habilitado a eliminar este gasto'

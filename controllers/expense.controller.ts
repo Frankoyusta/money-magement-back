@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { ExpenseService } from "../services/expenses.service";
 
+interface RequestWithUser extends Request {
+    uid?: string;
+    name?: string;
+}
+
 const expenseService = new ExpenseService();
 
 
-export const getExpensesController = async (req: Request, res: Response) => {
-    const { userId } = req.query
-    console.log(JSON.stringify(userId))
+export const getExpensesController = async (req: RequestWithUser, res: Response) => {
+    const userId = req.uid
     if (!userId) {
         return res.status(401).json({
             ok: false,
@@ -38,7 +42,7 @@ export const upsertController = async (req: Request, res: Response) => {
                 msg: response.msg
             })
         }
-        return res.status(201).json({
+        return res.status(200).json({
             ok: true,
             msg: 'Producto creado o editado con exito'
         })
@@ -54,10 +58,16 @@ export const upsertController = async (req: Request, res: Response) => {
 
 
 
-export const deleteExpenseController = async (req: Request, res: Response) => {
+export const deleteExpenseController = async (req: RequestWithUser, res: Response) => {
     try {
-        const { expenseId, userId } = req.body
-        console.log({ expenseId, userId })
+        const userId = req.uid
+        const { expenseId } = req.body
+        if (!userId) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'El id del usuario es requerido'
+            })
+        }
         const response = await expenseService.deleteExpenseById(expenseId, userId);
         if (response.codeError) {
             return res.status(response.codeError).json({

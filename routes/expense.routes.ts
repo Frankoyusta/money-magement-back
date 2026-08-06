@@ -3,10 +3,11 @@ import { deleteExpenseController, getExpensesController, upsertController } from
 import { check } from 'express-validator';
 import { fieldValidator } from '../middlewares/fields-validator';
 import { isValidIsoDateTime } from '../helpers/isDateISO-8601';
+import { validateJWT } from '../middlewares/validate-jwt';
 
 export const router = Router();
 
-
+router.use(validateJWT)
 
 
 router.get('/', getExpensesController)
