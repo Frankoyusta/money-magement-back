@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import { router as authRouter } from './routes/auth.routes';
+import { router as expenseRouter } from './routes/expense.routes';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 
@@ -24,8 +25,9 @@ app.use(express.json());
 // Rutas de autenticación
 app.use('/api/auth', authRouter)
 
-// // Rutas de gastos
-// app.use('/', (req, res) => { })
+// Rutas de gastos
+app.use('/api/expense', expenseRouter)
+
 
 // // Rutas de administración
 // app.use('/', (req, res) => { })

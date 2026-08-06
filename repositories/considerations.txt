@@ -1,0 +1,8 @@
+Se tuvo en consideración la posibilidad de implementar un repositorio genérico utilizando la entidad T, 
+ya que los repositorios comparten gran parte de su lógica, como las operaciones básicas de un CRUD: obtener 
+un objeto por su ID, crear, actualizar y eliminar registros.
+
+Sin embargo, como decisión técnica —y considerando que este corresponde a mi primer proyecto— se optó por 
+mantener repositorios independientes para las entidades User y Expense. De esta forma, la lógica de acceso 
+a datos de cada entidad se encuentra claramente separada, haciendo más explícita la división de responsabilidades
+entre las capas de repositorio, servicio y controlador, lo que además facilita la comprensión y el mantenimiento del proyecto.
