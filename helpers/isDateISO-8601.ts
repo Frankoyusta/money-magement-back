@@ -1,5 +1,4 @@
 export const isValidIsoDateTime = (value: any, { req, location, path }: any): boolean => {
-    console.log(value)
     // 1. Valida el formato de texto estricto YYYY-MM-DDTHH:mm:ssZ
     const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
     if (!isoRegex.test(value)) return false;

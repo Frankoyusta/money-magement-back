@@ -7,15 +7,21 @@ export const upsertController = async (req: Request, res: Response) => {
     try {
         const { expense } = req.body
         const response = await expenseService.upsertExpense(expense);
+        if (response.codeError) {
+            return res.status(response.codeError).json({
+                ok: false,
+                msg: response.msg
+            })
+        }
         return res.status(201).json({
             ok: true,
-            msg: 'Prueba creada con exito'
+            msg: 'Producto creado o editado con exito'
         })
     } catch (error) {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: 'Prueba fallida'
+            msg: 'Error en el servidor'
         })
     }
 }

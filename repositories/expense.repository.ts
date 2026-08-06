@@ -7,7 +7,6 @@ import { Decimal } from '@prisma/client/runtime/client';
 
 export class ExpenseRepository {
     upsertExpense = async (expense: UpsertExpense) => {
-        console.log(expense.description, 'aaa')
         const { id = '' } = expense
         return await prisma.expense.upsert({
             where: {
@@ -27,6 +26,14 @@ export class ExpenseRepository {
                 userId: expense.userId,
                 description: expense.description
 
+            }
+        })
+    }
+
+    findById = async (id: string) => {
+        return await prisma.expense.findUnique({
+            where: {
+                id
             }
         })
     }
