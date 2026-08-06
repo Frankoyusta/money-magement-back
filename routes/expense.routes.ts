@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getExpensesController, upsertController } from '../controllers/expense.controller';
+import { deleteExpenseController, getExpensesController, upsertController } from '../controllers/expense.controller';
 import { check } from 'express-validator';
 import { fieldValidator } from '../middlewares/fields-validator';
 import { isValidIsoDateTime } from '../helpers/isDateISO-8601';
@@ -25,4 +25,13 @@ router.post('/upsert',
     , upsertController);
 
 
+router.delete('/',
+    [
+        // Middlewares
+        check('expenseId', 'El campo expenseID es obligatorio').not().isEmpty(),
+        check('userId', 'El campo expenseID es obligatorio').not().isEmpty(),
+        fieldValidator
+
+    ]
+    , deleteExpenseController);
 

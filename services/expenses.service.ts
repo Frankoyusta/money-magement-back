@@ -51,4 +51,31 @@ export class ExpenseService {
         }
     }
 
+
+    deleteExpenseById = async (expenseId: string, userId: string) => {
+        // Validar que el usuario exista 
+        const user = await userRepository.findUserById(userId);
+        if (!user) {
+            return {
+                codeError: 404,
+                msg: 'Usuario no existe'
+            };
+        };
+
+        // En caso de edición se busca el expense y validamos que el userId del expense sea el mismo que el del user
+        const expenseFouded = await expenseRepository.findById(expenseId)
+        if (expenseFouded && expenseFouded.userId !== user.id) {
+            return {
+                codeError: 401,
+                msg: 'No estas habilitado a eliminar este gasto'
+            };
+        }
+
+        await expenseRepository.deleteExpenseById(expenseId);
+
+        return {}
+
+
+    }
+
 }

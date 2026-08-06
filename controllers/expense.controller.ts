@@ -54,5 +54,32 @@ export const upsertController = async (req: Request, res: Response) => {
 
 
 
+export const deleteExpenseController = async (req: Request, res: Response) => {
+    try {
+        const { expenseId, userId } = req.body
+        console.log({ expenseId, userId })
+        const response = await expenseService.deleteExpenseById(expenseId, userId);
+        if (response.codeError) {
+            return res.status(response.codeError).json({
+                ok: false,
+                msg: response.msg
+            })
+        }
+        return res.status(201).json({
+            ok: true,
+            msg: 'Producto eliminado con exito'
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error en el servidor'
+        })
+    }
+}
+
+
+
+
 
 

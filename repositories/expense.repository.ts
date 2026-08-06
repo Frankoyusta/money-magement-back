@@ -45,4 +45,13 @@ export class ExpenseRepository {
             }
         })
     }
+
+
+    deleteExpenseById = async (id: string) => {
+        return await prisma.expense.delete({
+            where: {
+                id
+            }
+        })
+    }
 }
